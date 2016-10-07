@@ -1,5 +1,7 @@
 # Configuración de OpenVPN para Debian 8
 
+## cliente headless (openvpn como servicio)
+
 + Descargar el certificado de la CA y la configuración del cliente de la siguiente ubicación
 
 https://becarios.tonejito.info/vpn/
@@ -60,3 +62,49 @@ AUTOSTART="all"
 ```
 # service openvpn restart
 ```
+
+## Cliente con ambiente gráfico
+
+### Gnome
+
++ Instalar el paquete de openvpn para NetwokManager
+
+```
+# apt-get install network-manager-openvpn-gnome
+```
+### Mac OS X
+
++ Instalar TunnelBlick
+
+https://tunnelblick.net/
+
++ Crear un directorio tblk
+
+```
+% mkdir becarios
+```
+
++ Copiar la configuración, certificados y llaves al directorio tblk
+
+```
+% cp -v client.conf ca.crt client.crt client.key becarios
+```
+
++ Renombrar el directorio, debe cambiar el icono que aparece en el Finder
+
+```
+% mv -v becarios becarios.tblk
+% cd becarios.tblk
+% cp -v client.conf client.ovpn
+```
+
++ Dar doble clic en el directorio becarios.tblk y seguir las instrucciones de TunnelBlick
+
++ Más información
+
+https://tunnelblick.net/documents.html
+https://www.privateinternetaccess.com/pages/client-support/osx-openvpn-tunnelblick
+
+### Windows
+
+https://www.asus.com/support/faq/1004469/
