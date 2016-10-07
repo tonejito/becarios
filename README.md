@@ -15,8 +15,8 @@
 
  Servicios de red | Aplicaciones
 ------------------|-------------
- http             | Drupal
- https            |
+ http             | Drupal (MySQL)
+ https            | Drupal (Postgres)
 
 Descripción
 
@@ -60,7 +60,7 @@ Descripción
 
  Servicios de red | Aplicaciones
 ------------------|-------------
- nfs              | ownCloud
+ nfs              | ownCloud (requiere bd en DATABASE)
                   | cuotas
 
 Descripción
@@ -89,3 +89,8 @@ Descripción
 
 
     /ruta/hacia/bitacoras/10.0.0.1.log
+
+### Extras
+
+* Es posible utilizar letsencrypt para tener certificados SSL válidos
+* 
