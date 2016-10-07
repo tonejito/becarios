@@ -65,12 +65,7 @@ Descripción
 
 ### DATABASE
 
-Servicios de red
-
-* mysql
-* pgsql
-* syslog
- Servicios de red | Aplicaciones
+Servicios de red | Aplicaciones
 ------------------|-------------
  mysql            | 
  pgsql            | 
