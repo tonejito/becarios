@@ -108,3 +108,56 @@ https://www.privateinternetaccess.com/pages/client-support/osx-openvpn-tunnelbli
 ### Windows
 
 https://www.asus.com/support/faq/1004469/
+
+## Diagnóstico de conexión
+
++ Ver la configuración de la interfaz `tun0`, debería tener una dirección IP del segmento `172.16.0.0/24`
+
+```
+# ifconfig -a tun0
+tun0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  
+          inet addr:172.16.0.6  P-t-P:172.16.0.5  Mask:255.255.255.255
+          inet6 addr: fe80::3ae9:2a6e:affa:b4f7/64 Scope:Link
+          UP POINTOPOINT RUNNING NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:39 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:42 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:100 
+          RX bytes:3276 (3.1 KiB)  TX bytes:3420 (3.3 KiB)
+```
++ Revisar la tabla de rutas, deben existir rutas por la interfaz `tun0`
+
+```
+# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+...
+172.16.0.0      172.16.0.5      255.255.255.0   UG    0      0        0 tun0
+172.16.0.5      0.0.0.0         255.255.255.255 UH    0      0        0 tun0
+```
+
++ Revisar la conectividad utilizando `ping` hacia `172.16.0.1` y `172.16.0.6`
+
+```
+# ping -c 4 172.16.0.1
+PING 172.16.0.1 (172.16.0.1) 56(84) bytes of data.
+64 bytes from 172.16.0.1: icmp_seq=1 ttl=64 time=75.5 ms
+64 bytes from 172.16.0.1: icmp_seq=2 ttl=64 time=75.5 ms
+64 bytes from 172.16.0.1: icmp_seq=3 ttl=64 time=75.6 ms
+64 bytes from 172.16.0.1: icmp_seq=4 ttl=64 time=75.6 ms
+
+--- 172.16.0.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3004ms
+rtt min/avg/max/mdev = 75.553/75.610/75.680/0.202 ms
+```
+```
+# ping -c 4 172.16.0.6
+PING 172.16.0.6 (172.16.0.6) 56(84) bytes of data.
+64 bytes from 172.16.0.6: icmp_seq=1 ttl=64 time=0.024 ms
+64 bytes from 172.16.0.6: icmp_seq=2 ttl=64 time=0.038 ms
+64 bytes from 172.16.0.6: icmp_seq=3 ttl=64 time=0.029 ms
+64 bytes from 172.16.0.6: icmp_seq=4 ttl=64 time=0.034 ms
+
+--- 172.16.0.6 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 2997ms
+rtt min/avg/max/mdev = 0.024/0.031/0.038/0.006 ms
+```
