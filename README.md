@@ -1,9 +1,17 @@
 # UNAM-CERT - Plan de Becarios G11 2016
 ## Proyecto Administración y Seguridad en Linux / UNIX
 
-Descripción de los servidores
+#### Diagrama de conexión VPN
 
-### WEB
+![Diagrama de conexión VPN](proyecto-vpn.png)
+
+#### Diagrama de dependencias
+
+![Diagrama de dependencias](proyecto-deps.png)
+
+### Descripción de los servidores
+
+#### WEB
 
  Servicios de red | Aplicaciones
 ------------------|-------------
@@ -18,7 +26,7 @@ Descripción
   * Una instancia guardará su base de datos en MySQL y otra en PostgreSQL
 
 
-### MAIL
+#### MAIL
 
  Servicios de red | Aplicaciones
 ------------------|-------------
@@ -33,7 +41,7 @@ Descripción
 * Los usuarios de correo deben ser autenticados con el directorio LDAP ubicado en el servidor DIRECTORY
 * Los buzones de correo deben almacenarse en el servidor STORAGE, se recomienda utilizar Maildir como formato de buzón
 
-### DIRECTORY
+#### DIRECTORY
 
  Servicios de red | Aplicaciones
 ------------------|-------------
@@ -48,7 +56,7 @@ Descripción
 * El servicio de directorio debe ser privado, es decir no debe aceptar conexiones ldap desde equipos externos
 * Se debe garantizar el servicio puesto que los otros hosts dependen de el
 
-### STORAGE
+#### STORAGE
 
  Servicios de red | Aplicaciones
 ------------------|-------------
@@ -63,7 +71,7 @@ Descripción
 * Para dar acceso a los archivos almacenados se debe proporcionar el servicio **ownCloud** autenticando a los usuarios por medio del sistema operativo o de LDAP
 * Se debe garantizar el servicio puesto que los otros hosts dependen de el
 
-### DATABASE
+#### DATABASE
 
 Servicios de red | Aplicaciones
 ------------------|-------------
@@ -79,7 +87,5 @@ Descripción
 * Este equipo debe servir como concentrador de bitacoras utilizando el protocolo syslog
 * Las bitácoras recolectadas deben guardarse en el servidor STORAGE como archivos separados dependiendo del host del que provengan
 
-	/ruta/hacia/bitacoras
-	  10.0.0.1.log
-	  172.16.0.1.log
-	  192.168.0.1.log
+
+    /ruta/hacia/bitacoras/10.0.0.1.log
