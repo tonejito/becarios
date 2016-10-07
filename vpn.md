@@ -18,7 +18,7 @@ https://becarios.tonejito.info/vpn/
 -rw-r--r-- 1 root root 3311 Oct  7 16:21 becarios.tonejito.info.key
 ```
 
-+ Renombrar el certificado de cliente y descifrar la llave privada, la contraseña es "becarios" (sin comillas)
++ Renombrar el certificado de cliente y descifrar la llave privada, la contraseña es "`becarios`" (sin comillas)
 
 ```
 # cp -v becarios.tonejito.info.crt client.crt
@@ -31,25 +31,25 @@ https://becarios.tonejito.info/vpn/
 # apt-get install openvpn
 ```
 
-+ Mover el certificado de la CA y la configuración del cliente al directorio /etc/openvpn
++ Mover el certificado de la CA y la configuración del cliente al directorio `/etc/openvpn`
 
 ```
 # mv -v ca.crt client.conf /etc/openvpn
 ```
 
-+ Mover el certificado y la llave privada del cliente al directorio /etc/openvpn
++ Mover el certificado y la llave privada del cliente al directorio `/etc/openvpn`
 
 ```
 # mv -v client.crt client.key /etc/openvpn
 ```
 
-+ Editar el archivo /etc/default/openvpn y descomentar la linea AUTOSTART=all
++ Editar el archivo `/etc/default/openvpn` y descomentar la linea `AUTOSTART=all`
 
 ```
 AUTOSTART="all"
 ```
 
-+ Recargar la configuración de systemctl
++ Recargar la configuración de `systemctl`
 
 ```
 # systemctl daemon-reload
