@@ -111,7 +111,57 @@ https://www.asus.com/support/faq/1004469/
 
 ## Diagnóstico de conexión
 
-+ Ver la configuración de la interfaz `tun0`, debería tener una dirección IP del segmento `172.16.0.0/24`
++ Detener el servicio `openvpn`
+
+```
+# service openvpn stop
+```
+
++ Iniciar `openvpn` manualmente. Después de algunos segundos debe aparecer el mensaje `Initialization Sequence Completed`
+
+```
+# openvpn --verb 3 --config client.conf
+Sun Oct  9 11:34:10 2016 OpenVPN 2.2.1 x86_64-linux-gnu [SSL] [LZO2] [EPOLL] [PKCS11] [eurephia] [MH] [PF_INET6] [IPv6 payload 20110424-2 (2.2RC2)] built on Dec  1 2014
+Sun Oct  9 11:34:10 2016 NOTE: OpenVPN 2.1 requires '--script-security 2' or higher to call user-defined scripts or executables
+Sun Oct  9 11:34:10 2016 WARNING: file 'client.key' is group or others accessible
+Sun Oct  9 11:34:10 2016 LZO compression initialized
+Sun Oct  9 11:34:10 2016 Control Channel MTU parms [ L:1542 D:138 EF:38 EB:0 ET:0 EL:0 ]
+Sun Oct  9 11:34:10 2016 Socket Buffers: R=[212992->131072] S=[212992->131072]
+Sun Oct  9 11:34:10 2016 Data Channel MTU parms [ L:1542 D:1450 EF:42 EB:135 ET:0 EL:0 AF:3/1 ]
+Sun Oct  9 11:34:10 2016 Local Options hash (VER=V4): '41690919'
+Sun Oct  9 11:34:10 2016 Expected Remote Options hash (VER=V4): '530fdded'
+Sun Oct  9 11:34:10 2016 UDPv4 link local: [undef]
+Sun Oct  9 11:34:10 2016 UDPv4 link remote: [AF_INET]104.245.36.21:1195
+Sun Oct  9 11:34:11 2016 TLS: Initial packet from [AF_INET]104.245.36.21:1195, sid=e2a73e09 3453d8e8
+Sun Oct  9 11:34:11 2016 VERIFY OK: depth=1, /C=MX/ST=CDMX/L=Coyoacan/O=UNAM-CERT/OU=Plan_de_Becarios/CN=ca.becarios.tonejito.info/emailAddress=admin@becarios.tonejito.info
+Sun Oct  9 11:34:11 2016 Validating certificate key usage
+Sun Oct  9 11:34:11 2016 ++ Certificate has key usage  00a0, expects 00a0
+Sun Oct  9 11:34:11 2016 VERIFY KU OK
+Sun Oct  9 11:34:11 2016 Validating certificate extended key usage
+Sun Oct  9 11:34:11 2016 ++ Certificate has EKU (str) TLS Web Server Authentication, expects TLS Web Server Authentication
+Sun Oct  9 11:34:11 2016 VERIFY EKU OK
+Sun Oct  9 11:34:11 2016 VERIFY OK: depth=0, /C=MX/ST=CDMX/L=Coyoacan/O=UNAM-CERT/OU=Plan_de_Becarios/CN=vpn.becarios.tonejito.info/emailAddress=admin@becarios.tonejito.info
+Sun Oct  9 11:34:13 2016 Data Channel Encrypt: Cipher 'BF-CBC' initialized with 128 bit key
+Sun Oct  9 11:34:13 2016 Data Channel Encrypt: Using 160 bit message hash 'SHA1' for HMAC authentication
+Sun Oct  9 11:34:13 2016 Data Channel Decrypt: Cipher 'BF-CBC' initialized with 128 bit key
+Sun Oct  9 11:34:13 2016 Data Channel Decrypt: Using 160 bit message hash 'SHA1' for HMAC authentication
+Sun Oct  9 11:34:13 2016 Control Channel: TLSv1, cipher TLSv1/SSLv3 DHE-RSA-AES256-SHA, 4096 bit RSA
+Sun Oct  9 11:34:13 2016 [vpn.becarios.tonejito.info] Peer Connection Initiated with [AF_INET]104.245.36.21:1195
+Sun Oct  9 11:34:15 2016 SENT CONTROL [vpn.becarios.tonejito.info]: 'PUSH_REQUEST' (status=1)
+Sun Oct  9 11:34:15 2016 PUSH: Received control message: 'PUSH_REPLY,route 172.16.0.0 255.255.255.0,topology net30,ping 10,ping-restart 120,ifconfig 172.16.0.142 172.16.0.141'
+Sun Oct  9 11:34:15 2016 OPTIONS IMPORT: timers and/or timeouts modified
+Sun Oct  9 11:34:15 2016 OPTIONS IMPORT: --ifconfig/up options modified
+Sun Oct  9 11:34:15 2016 OPTIONS IMPORT: route options modified
+Sun Oct  9 11:34:15 2016 ROUTE default_gateway=192.168.1.1
+Sun Oct  9 11:34:15 2016 TUN/TAP device tun0 opened
+Sun Oct  9 11:34:15 2016 TUN/TAP TX queue length set to 100
+Sun Oct  9 11:34:15 2016 do_ifconfig, tt->ipv6=0, tt->did_ifconfig_ipv6_setup=0
+Sun Oct  9 11:34:15 2016 /sbin/ifconfig tun0 172.16.0.142 pointopoint 172.16.0.141 mtu 1500
+Sun Oct  9 11:34:15 2016 /sbin/route add -net 172.16.0.0 netmask 255.255.255.0 gw 172.16.0.141
+Sun Oct  9 11:34:15 2016 Initialization Sequence Completed
+```
+
++ En otra terminal, ver la configuración de la interfaz `tun0`, debería tener una dirección IP del segmento `172.16.0.0/24`
 
 ```
 # ifconfig -a tun0
@@ -124,6 +174,7 @@ tun0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
           collisions:0 txqueuelen:100 
           RX bytes:3276 (3.1 KiB)  TX bytes:3420 (3.3 KiB)
 ```
+
 + Revisar la tabla de rutas, deben existir rutas por la interfaz `tun0`
 
 ```
@@ -160,4 +211,23 @@ PING 172.16.0.6 (172.16.0.6) 56(84) bytes of data.
 --- 172.16.0.6 ping statistics ---
 4 packets transmitted, 4 received, 0% packet loss, time 2997ms
 rtt min/avg/max/mdev = 0.024/0.031/0.038/0.006 ms
+```
+
++ Si todos los datos son correctos, presionar `Control-C` para cacelar `openvpn`
+
+```
+Sun Oct  9 11:34:15 2016 Initialization Sequence Completed
+^C
+Sun Oct  9 11:34:16 2016 event_wait : Interrupted system call (code=4)
+Sun Oct  9 11:34:16 2016 TCP/UDP: Closing socket
+Sun Oct  9 11:34:16 2016 /sbin/route del -net 172.16.0.0 netmask 255.255.255.0
+Sun Oct  9 11:34:16 2016 Closing TUN/TAP interface
+Sun Oct  9 11:34:16 2016 /sbin/ifconfig tun0 0.0.0.0
+Sun Oct  9 11:34:16 2016 SIGINT[hard,] received, process exiting
+```
+
++ Iniciar el servicio `openvpn`
+
+```
+# service openvpn restart
 ```
