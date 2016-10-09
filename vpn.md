@@ -111,6 +111,22 @@ https://www.asus.com/support/faq/1004469/
 
 ## Diagnóstico de conexión
 
++ Verificar criptográficamente que el certificado corresponda a la llave privada
+
+  * Comprobar la firma SHA1 del módulo de la llave privada
+
+```
+$ openssl rsa -in client.key -noout -modulus | sha1sum -
+42f6fa9d842f1acd9a6543fe93a1eed1f871c10c  -
+```
+
+  * Comprobar la firma SHA1 del módulo de la llave pública que contiene el certificado. La cadena **debe** ser idéntica a la de la llave privada
+
+```
+$ openssl x509 -in client.crt -noout -modulus | sha1sum -
+42f6fa9d842f1acd9a6543fe93a1eed1f871c10c  -
+```
+
 + Detener el servicio `openvpn`
 
 ```
