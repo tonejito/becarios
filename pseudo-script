@@ -1,0 +1,167 @@
+#!/bin/echo '= ^ . ^ ='
+#
+#	pseudo-script
+#
+
+ #####     ##     ####   ######
+ #    #   #  #   #       #
+ #####   #    #   ####   #####
+ #    #  ######       #  #
+ #    #  #    #  #    #  #
+ #####   #    #   ####   ######
+
+usermod --gid 100 unix
+delgroup unix
+for group in adm tape sudo backup operator staff ; do adduser unix $group ; done ;
+
+/etc/default/useradd
+	GROUP=100
+
+/etc/adduser.conf
+	USERGROUPS=no
+
+dpkg-reconfigure -p low debconf
+ interface=editor
+ priority=low
+aptitude update
+aptitude --assume-yes install beep zerofree sysvbanner linuxlogo screen tmux vlock ncdu
+ beep	group=audio
+aptitude --assume-yes install open-vm-tools
+aptitude --assume-yes install curl rsync
+aptitude --assume-yes install sudo iptables-persistent localepurge
+aptitude --assume-yes install iftop iotop
+
+aptitude --assume-yes purge nfs-common nfs-kernel-server rpcbind
+
+aptitude --assume-yes install vim && \
+echo 2 | update-alternatives --config editor && \
+echo 2 | select-editor
+
+dpkg-reconfigure -p low unattended-upgrades || ( aptitude --assume-yes install unattended-upgrades && dpkg-reconfigure -p low unattended-upgrades )
+
+	Automatically download and install stable updates?
+		yes
+
+  ####   #    #  #####    ####
+ #       #    #  #    #  #    #
+  ####   #    #  #    #  #    #
+      #  #    #  #    #  #    #
+ #    #  #    #  #    #  #    #
+  ####    ####   #####    ####
+
+In file	/etc/sudoers.d/insults
+
+Defaults	insults
+
+  ####    ####   #    #  #####
+ #       #       #    #  #    #
+  ####    ####   ######  #    #
+      #       #  #    #  #    #
+ #    #  #    #  #    #  #    #
+  ####    ####   #    #  #####
+
+aptitude --assume-yes install ssh openssh-blacklist{+M,-extra} openssl-blacklist{+M,-extra}
+
+In file	/etc/ssh/sshd_config
+
+PermitRootLogin without-password
+Banner /etc/issue.net
+UseDNS yes
+AllowGroups users
+
+printf '' > /etc/issue.net
+adduser root users
+
+ #    #   ####    #####  #####
+ ##  ##  #    #     #    #    #
+ # ## #  #    #     #    #    #
+ #    #  #    #     #    #    #
+ #    #  #    #     #    #    #
+ #    #   ####      #    #####
+
+In file	/etc/cron.hourly/motd
+#!/bin/bash
+#
+#	/etc/cron.hourly/motd
+#
+HOSTNAME=/bin/hostname
+XARGS=/usr/bin/xargs
+BANNER=/usr/bin/banner
+LINUXLOGO=/usr/bin/linuxlogo
+TEXT='= ^ . ^ ='
+MOTD=/etc/motd
+
+set -e
+
+[ -x $LINUXLOGO -a -x $HOSTNAME -a -x $XARGS -a -x $BANNER ] || exit 0
+
+$HOSTNAME | $XARGS $BANNER > $MOTD
+$LINUXLOGO -a -d -g -k -s -u -y -t "$TEXT" -F '#O #H #U #L #E' >> $MOTD
+
+ #####    ####           #        ####    ####     ##    #
+ #    #  #    #          #       #    #  #    #   #  #   #
+ #    #  #               #       #    #  #       #    #  #
+ #####   #        ###    #       #    #  #       ######  #
+ #   #   #    #   ###    #       #    #  #    #  #    #  #
+ #    #   ####    ###    ######   ####    ####   #    #  ######
+
+In file	/etc/rc.local
+
+#!/bin/sh -e
+/etc/cron.hourly/motd
+/usr/bin/linuxlogo -a -d -g -k -s -u -y
+exit 0
+
+  ####   #####   #    #  #####
+ #    #  #    #  #    #  #    #
+ #       #    #  #    #  #####
+ #  ###  #####   #    #  #    #
+ #    #  #   #   #    #  #    #
+  ####   #    #   ####   #####
+
+In file	/etc/default/grub
+
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=3
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="earlyprintk=vga,keep verbose INIT_VERBOSE=yes init=/sbin/init -v"
+GRUB_CMDLINE_LINUX="consoleblank=0"
+GRUB_DISABLE_LINUX_UUID=true
+GRUB_DISABLE_RECOVERY="true"
+
+update-grub
+
+
+ #####   #####    ####   ######     #    #       ######
+ #    #  #    #  #    #  #          #    #       #
+ #    #  #    #  #    #  #####      #    #       #####
+ #####   #####   #    #  #          #    #       #
+ #       #   #   #    #  #          #    #       #
+ #       #    #   ####   #          #    ######  ######
+
+In file	/root/.profile
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$PATH:$HOME/bin"
+fi
+
+ #    #   ####    ####    #####
+ #    #  #    #  #          #
+ ######  #    #   ####      #
+ #    #  #    #       #     #
+ #    #  #    #  #    #     #
+ #    #   ####    ####      #
+
+In file	/root/host.sh
+
+#!/bin/bash
+OLD_HOST=debian
+NEW_HOST=php 
+printf $NEW_HOST.local > /etc/hostname
+sed -i -e "s/$OLD_HOST/$NEW_HOST/g" /etc/hosts /etc/postfix/main.cf
+
+chmod +x ./host.sh
+./host.sh
+/etc/cron.hourly/motd
+reboot
