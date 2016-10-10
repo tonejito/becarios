@@ -94,3 +94,13 @@ Descripción
 
 * Es posible utilizar letsencrypt para tener certificados SSL válidos
 * 
+
+### Documentación
+
++ [Pseudo-script](https://github.com/tonejito/becarios/blob/master/pseudo-script)
++ Memoria técnica
+  * http://www.dozuki.com/Tech_Writing
+  * https://en.wikibooks.org/wiki/Professional_and_Technical_Writing/Instructions
+  * http://web.mit.edu/me-ugoffice/communication/technical-writing.pdf
+  * http://www.techprose.com/assets/techwriting_guidelines.pdf
+  
